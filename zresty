@@ -1,0 +1,59 @@
+
+_zresty_uri=""
+_zresty_tool="http"
+_zresty_methods=(get post put delete)
+
+_zresty_usage() {
+	echo "usage: $1 [OPTIONS] <URL>"
+	echo ""
+	echo "zresty options:"
+	echo "	*	all options are passed onto http upon each invocation of http methods"
+	echo ""
+	echo "zresty methods:"
+	echo "	${_zresty_methods}"
+	echo ""
+	echo "zresty method options:"
+	echo "
+	echo ""
+	echo "example:"
+	echo "	# . zresty"
+	echo "	# z :3000/api/1.0"
+	echo "	# get /ping"
+}
+
+_zresty_status() {
+	echo -e "uriprefix:\t$_zresty_uri"
+	echo -e "options:\t$_zresty_options"
+}
+
+z() {
+	if [ $# -eq 0 ] ; then
+		_zresty_status
+		return 0
+	fi
+	if [ "$1" = "--help" ] ; then
+		_zresty_usage $0
+		return 0
+	fi
+	if [ $# -gt 1 ] ; then
+		set -A _zresty_options
+	else
+		set -A _zresty_options -b
+	fi
+	while [ $# -gt 1 ] ; do
+		case $1 in
+			*)
+				_zresty_options+=$1
+				;;
+		esac
+		shift
+	done
+	_zresty_uri="$1"
+}
+
+for x in  ${_zresty_methods} ; do
+	$x() {
+		${_zresty_tool} ${_zresty_options} $0:u ${_zresty_uri}$@
+	}
+done
+
