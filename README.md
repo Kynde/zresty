@@ -1,50 +1,73 @@
 # zresty
 
-zresty is a zsh resty powered by httpie. It borrows its idea from _micha/resty_, but switches
-curl to _jkbrzt/httpie_.
+zresty is a zsh resty-like command line tool for testing restful apis powered by httpie.
+
+It borrows its idea from [resty](https://github.com/micha/resty) which
+allows setting the static section of the api uri beforehand and then sets up quick access
+methods for the variable part. Instead of `curl` the zresty uses the
+awesome [httpie](https://github.zom/jkbrzt/httpie).
+
+![Example][]
 
 ## Quick Start
 
+If you don't have [httpie](https://github.zom/jkbrzt/httpie), then get it first.
+It's availabe with `apt-get`, `yum`, `dnf`, `brew` and `pip` at least.
+
+Try zresty with
+
 ```
-$ z http://localhost:3001/api/1.0
-http://localhost:3001/api/1.0*
-$ get /ping
-{
-	"name": "giraffi",
-	"version": "0.1.0"
-}
-$ get /user/list
-[ 1, 2, 3 ]
-$ post /user name=Richard age=12
-{
-	"id": 4,
-	"name": "Richard",
-	"age": 12
-}
-$ get /user/4 | jq -r .name
-Richard
-$ for i in $( get /user/list | jq -r .[] ) ; do get /user/$i | jq .name ; done
-Daniel
-Sam
-Christopher
-Richard
+# curl -L http://github.com/kynde/zresty/raw/master/zresty > zresty
+# . ./zresty
+```
+
+or clone the repo and source it from there in your .zshrc like
+
+```
+git clone https://github.com/kynde/zresty ~/.zsh/zresty
+echo '. ~/.zsh/zresty/zresty' >> ~/.zshrc
 ```
 
 ## Usage
 
 ```
-usage: z [OPTIONS] <URL>
+usage: z [OPTIONS] <URI>
 
-Options will be passed onto httpie. The given url will be used as a prefix for url given to
-http methods.
+All options are passed onto http upon each invocation of http methods.
+Without URI it prints out current options and URI
 
-zresty itself currently doesn't have any options.
+zresty methods:
+	get post put delete
+
+zresty method options:
+	currently none
+
+example:
+	# . zresty
+	# z :3000/api/1.0
+	# get /ping
 ```
 
-The default is lowercase commands z,get,pust,post,delete. Head and options have been discarded
-because they're not the common case and tend to conflict with actual commands. Lowercase was
-chosen because they're easier to type, but that's easy to change.
+The defaults are lowercase commands z,get,pust,post and delete. Head, patch and options
+have been left out because they're not very common and tend to conflict with some
+actual commands. Lowercase was chosen because they're easier to type, but that's
+easy to change.
 
-The default options are `-b`, but given any options to the call to `z`, that default is then
-discarded.
+The default options are `-b` for body only. This is because it allows easy manipulation with [jq](https://github.com/stedolan/jq), e.g. `get /user | jq .name`.
 
+If any options are given to the call to `z`, that default is overridden.
+
+## Dependencies
+
+The [httpie](https://github.com/jkbrzt/httpie) is needed.
+
+## Why?
+
+I really liked the idea of `resty`, but I'd gotten too used to the powerful
+arguments and colours of `httpie` to let it go.
+
+## Bash?
+
+Why not, I don't use it, but go ahead and I'll be happy merge a pull request.
+
+[Example]: https://github.com/kynde/zresty/raw/master/zresty.png

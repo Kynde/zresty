@@ -3,17 +3,25 @@ _zresty_uri=""
 _zresty_tool="http"
 _zresty_methods=(get post put delete)
 
-_zresty_usage() {
-	echo "usage: $1 [OPTIONS] <URL>"
+if [ ! -x =http ] ; then
+	echo "error: http not found"
 	echo ""
-	echo "zresty options:"
-	echo "	*	all options are passed onto http upon each invocation of http methods"
+	echo "You distro might ship it or just get it from:"
+	echo "https://github.com/jkbrzt/httpie"
+	return 0
+fi
+
+_zresty_usage() {
+	echo "usage: $1 [OPTIONS] <URI>"
+	echo ""
+	echo "All options are passed onto http upon each invocation of http methods."
+	echo "Without URI it prints out current options and URI"
 	echo ""
 	echo "zresty methods:"
 	echo "	${_zresty_methods}"
 	echo ""
 	echo "zresty method options:"
-	echo "
+	echo "	currently none"
 	echo ""
 	echo "example:"
 	echo "	# . zresty"
