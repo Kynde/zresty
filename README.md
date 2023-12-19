@@ -33,7 +33,8 @@ echo '. ~/.zsh/zresty/zresty' >> ~/.zshrc
 ```
 usage: z [OPTIONS] <URI>
 
-All options are passed onto http upon each invocation of http methods.
+Most options are passed onto http upon each invocation of http methods.
+The special option is -H <HTTP-PARAMS> which can be used to pass headers to http for example
 Without URI it prints out current options and URI
 
 zresty methods:
@@ -56,6 +57,11 @@ easy to change.
 The default options are `-b` for body only. This is because it allows easy manipulation with [jq](https://github.com/stedolan/jq), e.g. `get /user | jq .name`.
 
 If any options are given to the call to `z`, that default is overridden.
+
+An api-key can be set using -H and headers, e.g.
+```
+    # z -b -H api-key:FOOBAR http://some.where/api
+```
 
 ## Dependencies
 
