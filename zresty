@@ -2,6 +2,10 @@
 _zresty_uri=""
 _zresty_tool="http"
 _zresty_methods=(get post put delete)
+_zresty_options=""
+_zresty_headers=""
+
+unalias z
 
 if [ ! -x =http ] ; then
 	echo "error: http not found"
@@ -14,7 +18,8 @@ fi
 _zresty_usage() {
 	echo "usage: $1 [OPTIONS] <URI>"
 	echo ""
-	echo "All options are passed onto http upon each invocation of http methods."
+	echo "Most options are passed onto http upon each invocation of http methods."
+	echo "The special option is -H <HTTP-PARAMS> which can be used to pass headers to http for example"
 	echo "Without URI it prints out current options and URI"
 	echo ""
 	echo "zresty methods:"
@@ -32,6 +37,7 @@ _zresty_usage() {
 _zresty_status() {
 	echo -e "uriprefix:\t$_zresty_uri"
 	echo -e "options:\t$_zresty_options"
+	echo -e "headers:\t$_zresty_headers"
 }
 
 z() {
@@ -45,11 +51,17 @@ z() {
 	fi
 	if [ $# -gt 1 ] ; then
 		set -A _zresty_options
+		set -A _zresty_headers
 	else
 		set -A _zresty_options -b
+		set -A _zresty_headers -b
 	fi
 	while [ $# -gt 1 ] ; do
 		case $1 in
+			-H)
+				shift
+				_zresty_headers+=$1
+				;;
 			*)
 				_zresty_options+=$1
 				;;
@@ -61,7 +73,7 @@ z() {
 
 for x in  ${_zresty_methods} ; do
 	$x() {
-		${_zresty_tool} ${_zresty_options} $0:u ${_zresty_uri}$@
+		${_zresty_tool} ${_zresty_options} $0:u ${_zresty_uri}$@ ${_zresty_headers}
 	}
 done
 
