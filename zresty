@@ -5,7 +5,7 @@ _zresty_methods=(get post put delete)
 _zresty_options=""
 _zresty_headers=""
 
-unalias z
+unalias z 2>/dev/null
 
 if [ ! -x =http ] ; then
 	echo "error: http not found"
