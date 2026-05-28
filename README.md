@@ -17,14 +17,14 @@ It's available with `apt-get`, `yum`, `dnf`, `brew` and `pip` at least.
 Try zresty with
 
 ```
-# curl -L https://github.com/kynde/zresty/raw/master/zresty.plugin.zsh > zresty.plugin.zsh
+# curl -L https://github.com/Kynde/zresty/raw/master/zresty.plugin.zsh > zresty.plugin.zsh
 # . ./zresty.plugin.zsh
 ```
 
 or clone the repo and source it from there in your `.zshrc` like
 
 ```
-git clone https://github.com/kynde/zresty ~/.zsh/zresty
+git clone https://github.com/Kynde/zresty ~/.zsh/zresty
 echo '. ~/.zsh/zresty/zresty.plugin.zsh' >> ~/.zshrc
 ```
 
@@ -34,16 +34,16 @@ zresty ships as a standard `*.plugin.zsh` file, so any of the usual zsh plugin m
 
 ```zsh
 # antidote (in your .zsh_plugins.txt)
-kynde/zresty
+Kynde/zresty
 
 # antigen
-antigen bundle kynde/zresty
+antigen bundle Kynde/zresty
 
 # zinit
-zinit light kynde/zresty
+zinit light Kynde/zresty
 
 # oh-my-zsh
-git clone https://github.com/kynde/zresty ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zresty
+git clone https://github.com/Kynde/zresty ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zresty
 # then add `zresty` to plugins=(...) in ~/.zshrc
 ```
 
@@ -105,4 +105,4 @@ arguments and colours of `httpie` to let it go.
 
 Why not, I don't use it, but go ahead and I'll be happy merge a pull request.
 
-[Example]: https://github.com/kynde/zresty/raw/master/zresty.png
+[Example]: https://github.com/Kynde/zresty/raw/master/zresty.png
