@@ -5,7 +5,11 @@ typeset -ga _zresty_methods=(get post put delete)
 typeset -ga _zresty_options=()
 typeset -ga _zresty_headers=()
 
-unalias z 2>/dev/null
+# Name of the main command. Default 'zr' to avoid clobbering zoxide's 'z'.
+# Set ZRESTY_CMD before sourcing to override (e.g. ZRESTY_CMD=z for the classic name).
+typeset -g _zresty_cmd=${ZRESTY_CMD:-zr}
+
+unalias $_zresty_cmd 2>/dev/null
 
 if (( ! $+commands[http] )) ; then
 	echo "error: http not found"
@@ -30,7 +34,7 @@ _zresty_usage() {
 	echo ""
 	echo "example:"
 	echo "	# . zresty.plugin.zsh"
-	echo "	# z :3000/api/1.0"
+	echo "	# $1 :3000/api/1.0"
 	echo "	# get /ping"
 }
 
@@ -40,13 +44,13 @@ _zresty_status() {
 	echo -e "headers:\t$_zresty_headers"
 }
 
-z() {
+_zresty_main() {
 	if (( $# == 0 )) ; then
 		_zresty_status
 		return 0
 	fi
 	if [[ "$1" == "--help" ]] ; then
-		_zresty_usage z
+		_zresty_usage $_zresty_cmd
 		return 0
 	fi
 	if (( $# > 1 )) ; then
@@ -69,6 +73,9 @@ z() {
 	done
 	_zresty_uri="$1"
 }
+
+# Bind the configured name to the main function.
+eval "${_zresty_cmd}() { _zresty_main \"\$@\"; }"
 
 for x in $_zresty_methods ; do
 	$x() {

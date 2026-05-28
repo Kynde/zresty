@@ -50,7 +50,7 @@ git clone https://github.com/kynde/zresty ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plu
 ## Usage
 
 ```
-usage: z [OPTIONS] <URI>
+usage: zr [OPTIONS] <URI>
 
 Most options are passed onto http upon each invocation of http methods.
 The special option is -H <HTTP-PARAMS> which can be used to pass headers to http for example
@@ -64,22 +64,32 @@ zresty method options:
 
 example:
 	# . zresty.plugin.zsh
-	# z :3000/api/1.0
+	# zr :3000/api/1.0
 	# get /ping
 ```
 
-The defaults are lowercase commands `z`, `get`, `put`, `post` and `delete`. Head, patch and options
+The defaults are lowercase commands `zr`, `get`, `put`, `post` and `delete`. Head, patch and options
 have been left out because they're not very common and tend to conflict with some
 actual commands. Lowercase was chosen because they're easier to type, but that's
 easy to change.
 
+The main command name (`zr` by default) is configurable via `ZRESTY_CMD`, set
+*before* sourcing the plugin. The default used to be `z`, but [zoxide](https://github.com/ajeetdsouza/zoxide)
+now ships a `z` of its own that you almost certainly don't want overridden. To
+get the classic behaviour back:
+
+```zsh
+ZRESTY_CMD=z
+. ~/.zsh/zresty/zresty.plugin.zsh
+```
+
 The default options are `-b` for body only. This is because it allows easy manipulation with [jq](https://github.com/stedolan/jq), e.g. `get /user | jq .name`.
 
-If any options are given to the call to `z`, that default is overridden.
+If any options are given to the call to `zr`, that default is overridden.
 
 An api-key can be set using `-H` and headers, e.g.
 ```
-    # z -b -H api-key:FOOBAR http://some.where/api
+    # zr -b -H api-key:FOOBAR http://some.where/api
 ```
 
 ## Dependencies
