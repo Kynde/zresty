@@ -1,18 +1,18 @@
 
-_zresty_uri=""
-_zresty_tool="http"
-_zresty_methods=(get post put delete)
-_zresty_options=""
-_zresty_headers=""
+typeset -g  _zresty_uri=""
+typeset -g  _zresty_tool="http"
+typeset -ga _zresty_methods=(get post put delete)
+typeset -ga _zresty_options=()
+typeset -ga _zresty_headers=()
 
 unalias z 2>/dev/null
 
-if [ ! -x =http ] ; then
+if (( ! $+commands[http] )) ; then
 	echo "error: http not found"
 	echo ""
-	echo "You distro might ship it or just get it from:"
-	echo "https://github.com/jkbrzt/httpie"
-	return 0
+	echo "Your distro might ship it or just get it from:"
+	echo "https://github.com/httpie/cli"
+	return 1
 fi
 
 _zresty_usage() {
@@ -23,13 +23,13 @@ _zresty_usage() {
 	echo "Without URI it prints out current options and URI"
 	echo ""
 	echo "zresty methods:"
-	echo "	${_zresty_methods}"
+	echo "	$_zresty_methods"
 	echo ""
 	echo "zresty method options:"
 	echo "	currently none"
 	echo ""
 	echo "example:"
-	echo "	# . zresty"
+	echo "	# . zresty.plugin.zsh"
 	echo "	# z :3000/api/1.0"
 	echo "	# get /ping"
 }
@@ -41,29 +41,28 @@ _zresty_status() {
 }
 
 z() {
-	if [ $# -eq 0 ] ; then
+	if (( $# == 0 )) ; then
 		_zresty_status
 		return 0
 	fi
-	if [ "$1" = "--help" ] ; then
-		_zresty_usage $0
+	if [[ "$1" == "--help" ]] ; then
+		_zresty_usage z
 		return 0
 	fi
-	if [ $# -gt 1 ] ; then
-		set -A _zresty_options
-		set -A _zresty_headers
+	if (( $# > 1 )) ; then
+		_zresty_options=()
 	else
-		set -A _zresty_options -b
-		set -A _zresty_headers -b
+		_zresty_options=(-b)
 	fi
-	while [ $# -gt 1 ] ; do
+	_zresty_headers=()
+	while (( $# > 1 )) ; do
 		case $1 in
 			-H)
 				shift
-				_zresty_headers+=$1
+				_zresty_headers+=("$1")
 				;;
 			*)
-				_zresty_options+=$1
+				_zresty_options+=("$1")
 				;;
 		esac
 		shift
@@ -71,9 +70,9 @@ z() {
 	_zresty_uri="$1"
 }
 
-for x in  ${_zresty_methods} ; do
+for x in $_zresty_methods ; do
 	$x() {
-		${_zresty_tool} ${_zresty_options} $0:u ${_zresty_uri}$@ ${_zresty_headers}
+		$_zresty_tool $_zresty_options ${0:u} "${_zresty_uri}${1-}" "${@:2}" $_zresty_headers
 	}
 done
-
+unset x

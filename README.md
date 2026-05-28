@@ -5,27 +5,46 @@ zresty is a zsh resty-like command line tool for testing restful apis powered by
 It borrows its idea from [resty](https://github.com/micha/resty) which
 allows setting the static section of the api uri beforehand and then sets up quick access
 methods for the variable part. Instead of `curl` the zresty uses the
-awesome [httpie](https://github.zom/jkbrzt/httpie).
+awesome [httpie](https://github.com/httpie/cli).
 
 ![Example][]
 
 ## Quick Start
 
-If you don't have [httpie](https://github.zom/jkbrzt/httpie), then get it first.
-It's availabe with `apt-get`, `yum`, `dnf`, `brew` and `pip` at least.
+If you don't have [httpie](https://github.com/httpie/cli), then get it first.
+It's available with `apt-get`, `yum`, `dnf`, `brew` and `pip` at least.
 
 Try zresty with
 
 ```
-# curl -L http://github.com/kynde/zresty/raw/master/zresty > zresty
-# . ./zresty
+# curl -L https://github.com/kynde/zresty/raw/master/zresty.plugin.zsh > zresty.plugin.zsh
+# . ./zresty.plugin.zsh
 ```
 
-or clone the repo and source it from there in your .zshrc like
+or clone the repo and source it from there in your `.zshrc` like
 
 ```
 git clone https://github.com/kynde/zresty ~/.zsh/zresty
-echo '. ~/.zsh/zresty/zresty' >> ~/.zshrc
+echo '. ~/.zsh/zresty/zresty.plugin.zsh' >> ~/.zshrc
+```
+
+### As a plugin
+
+zresty ships as a standard `*.plugin.zsh` file, so any of the usual zsh plugin managers will pick it up:
+
+```zsh
+# antidote (in your .zsh_plugins.txt)
+kynde/zresty
+
+# antigen
+antigen bundle kynde/zresty
+
+# zinit
+zinit light kynde/zresty
+
+# oh-my-zsh
+git clone https://github.com/kynde/zresty ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zresty
+# then add `zresty` to plugins=(...) in ~/.zshrc
 ```
 
 ## Usage
@@ -44,12 +63,12 @@ zresty method options:
 	currently none
 
 example:
-	# . zresty
+	# . zresty.plugin.zsh
 	# z :3000/api/1.0
 	# get /ping
 ```
 
-The defaults are lowercase commands z,get,pust,post and delete. Head, patch and options
+The defaults are lowercase commands `z`, `get`, `put`, `post` and `delete`. Head, patch and options
 have been left out because they're not very common and tend to conflict with some
 actual commands. Lowercase was chosen because they're easier to type, but that's
 easy to change.
@@ -58,14 +77,14 @@ The default options are `-b` for body only. This is because it allows easy manip
 
 If any options are given to the call to `z`, that default is overridden.
 
-An api-key can be set using -H and headers, e.g.
+An api-key can be set using `-H` and headers, e.g.
 ```
     # z -b -H api-key:FOOBAR http://some.where/api
 ```
 
 ## Dependencies
 
-The [httpie](https://github.com/jkbrzt/httpie) is needed.
+The [httpie](https://github.com/httpie/cli) is needed.
 
 ## Why?
 
